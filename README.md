@@ -12,7 +12,7 @@
 ## Inference
 
 ### Master-print-generation
-* CUDA_VISIBLE_DEVICES=0 python master_print_generator/z2binary.py --model_dir master_print_generator/log/biggan_z2binary_cm_live --output_dir example_master_prints --batch_size 1
+* CUDA_VISIBLE_DEVICES=0 python master_print_generator/z2binary.py --model_dir master_print_generator/log/biggan_z2binary_cm_live --output_dir example_master_prints --num_fingers 10 --batch_size 1
 
 ### Statistical-warping
 * python STN/warp_images.py --num_impressions 3 --input_dir example_master_prints --output_dir example_master_prints_warped
