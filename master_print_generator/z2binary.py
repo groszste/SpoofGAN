@@ -17,7 +17,7 @@ def main(args):
 
     np.random.seed(12)
 
-    NUM_FINGERS = 10
+    NUM_FINGERS = args.num_fingers
     start_idx = 0
     BS = args.batch_size
 
@@ -58,6 +58,8 @@ if __name__ == '__main__':
                         type=str, required=True)
     parser.add_argument("--output_dir", help="Output directory to save master prints",
                         type=str, default='example_master_prints')
+    parser.add_argument("--num_fingers", help="Number of fingers to generate",
+                        type=int, default=10)
     parser.add_argument("--batch_size", help="Number of images per batch",
                         type=int, default=1)
     args = parser.parse_args()
