@@ -34,7 +34,7 @@
 
 ## Models
 
-All model checkpoints can be found at https::TODO
+All model checkpoints can be found at https://drive.google.com/drive/folders/1ntdAwUJzFuozTqonaoxGlt7NNhCGB6pe?usp=sharing. 
 
 ## Getting Started (Documentation)
 
