@@ -4,7 +4,7 @@
 - [Inference](#Inference)
 - [Models](#Models)
 - [Getting Started (Documentation)](#Getting-Started-Documentation)
-- [Licenses](#Licenses)
+- [License](#License)
 - [Citing](#Citing)
 
 ## Introduction
