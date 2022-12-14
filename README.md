@@ -54,7 +54,9 @@ The list of possible materials to choose from is given below:
 
 ## Models
 
-All model checkpoints can be found at https://drive.google.com/drive/folders/1ntdAwUJzFuozTqonaoxGlt7NNhCGB6pe?usp=sharing. In order for the inference script to run, the model checkpoint folders (i.e., log folders) must be downloaded and placed in the master_print_generator and renderer directories. 
+All model checkpoints can be found at https://drive.google.com/drive/folders/1ntdAwUJzFuozTqonaoxGlt7NNhCGB6pe?usp=sharing.
+
+In order for the inference script to run, the model checkpoint folders (i.e., log folders) must be downloaded and placed in the master_print_generator and renderer directories. 
 
 ## Getting Started (Documentation)
 
