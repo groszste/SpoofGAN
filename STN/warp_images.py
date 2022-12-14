@@ -1,19 +1,18 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
-import tensorflow as tf
-import numpy as np
-import tensorflow.contrib.slim as slim
-from tps_stn import ElasticTransformer
-
+import argparse
+import cv2
+from functools import partial
 import glob
+import imp
+import numpy as np
 import os
 import sys
-import cv2
-from scipy.io import loadmat
+import tensorflow as tf
+import tensorflow.contrib.slim as slim
 import time
-import argparse
+
+# sys.path.append('STN/')
+from scipy.io import loadmat
+from tps_stn import ElasticTransformer
 
 def pad_image(img, output_w, output_h):
     h, w = img.shape[:2]
@@ -117,6 +116,48 @@ def main(args):
                 # if x == ord('e'):
                 #     raise Exception('exiting')
 
+
+class TPSwarp:
+    def __init__(self, n0=4):
+        self.graph = tf.Graph()
+        gpu_options = tf.GPUOptions(allow_growth=True)
+        tf_config = tf.ConfigProto(gpu_options=gpu_options,
+                allow_soft_placement=True, log_device_placement=False)
+        self.sess = tf.Session(graph=self.graph, config=tf_config)
+        self.n0 = n0
+            
+    def initialize(self):
+        with self.graph.as_default():
+            with self.sess.as_default():
+                self.inputs = tf.placeholder(tf.float32, shape=[1, 560, 416, 1], name='inputs')
+                self.displacements = tf.placeholder(tf.float32, shape=[1, 2*self.n0**2], name='displacements')
+                
+                self.load_tps()
+
+                warped_images, _ = self.tps(image=self.inputs, displacements=self.displacements)
+                self.warped_images = tf.identity(warped_images, name='outputs')
+
+                self.sess.run(tf.local_variables_initializer())
+                self.sess.run(tf.global_variables_initializer())
+
+    def load_tps(self):
+        print("Loading TPS module!!!")
+        warp_model = imp.load_source('network_model', 'STN/tps_stn.py')
+        self.tps = partial(warp_model.inference)
+
+    def warp_images(self, images, displacements):
+        feed_dict = {
+                    self.inputs: images,
+                    self.displacements: displacements,
+        }
+        result = self.sess.run(self.warped_images, feed_dict=feed_dict)
+        return result
+
+    def load_model(self, *args, **kwargs):
+        self.inputs = self.graph.get_tensor_by_name('inputs:0')
+        self.displacements = self.graph.get_tensor_by_name('displacements:0')
+
+        
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--num_impressions", help="Number of impressions to generate per finger",

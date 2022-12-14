@@ -802,3 +802,24 @@ def bicubic_interp(im, x, y, out_size):
 
         output = tf.add_n(y_interp)
         return output
+
+def inference(image, displacements, out_size=(560,416), n0=4):
+    # image, displacements = inputs
+    print(image)
+    print(displacements)
+    stl = ElasticTransformer(out_size, param_dim=2*n0**2)
+    # x = x_displacements.reshape((11,9))
+    # y = y_displacements.reshape((11,9))
+
+    # x = cv2.resize(x, dsize=(n0, n0), interpolation=cv2.INTER_CUBIC)
+    # y = cv2.resize(y, dsize=(n0, n0), interpolation=cv2.INTER_CUBIC)
+
+    # x = x / 416
+    # y = y / 560
+
+    # x = x.flatten().tolist()
+    # y = y.flatten().tolist()
+    
+    # displacements = tf.concat((x, y), axis=0)
+    warped_img = stl.transform(image, displacements)
+    return warped_img, displacements
