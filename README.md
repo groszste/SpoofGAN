@@ -60,7 +60,18 @@ In order for the inference script to run, the model checkpoint folders (i.e., lo
 
 ## Getting Started (Documentation)
 
-...
+Creating conda environment
+
+	conda create -n (name) python=3.7
+
+Install the following packages:
+
+	conda install tensorflow-gpu==1.14.0
+	pip install opencv-python
+	conda install gast==0.2.0
+	conda install scipy==1.2.1
+	conda install pillow==8.4.0
+	conda install tqdm
 
 ## License
 
