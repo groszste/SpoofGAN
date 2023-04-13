@@ -28,7 +28,7 @@ To generate synthetic images run the generate.py script with the appropriate arg
 		--num_impressions: Number of impressions per finger. Default=3
 		--seed: Random Seed. Default=12.
 		--start: Starting finger ID. Default=0.
-		--random_ckpt: Load random model ckpt rather than latest. Default=True.
+		--random_ckpt: Load random model ckpt rather than latest. Default=False.
 
 Example:
 
@@ -40,17 +40,11 @@ The list of possible materials to choose from is given below:
 	pa
 	body_double
 	conductive_ink
-	dragon_skin
 	ecoflex
 	gelatin
-	gold_fingers
 	gummy_overlay
-	knox_gelatin
 	playdoh
 	tattoo
-	transparency
-	woodglue
-
 
 ## Models
 
@@ -100,4 +94,4 @@ SOFTWARE.
 
 If you use this code in your work please cite the following paper:
 
-S.A. Grosz and A. K. Jain, "Spoofgan: Synthetic Fingerprint Spoof Images," IEEE Transactions on Information Forensics and Security, 2022.
+S.A. Grosz and A. K. Jain, "SpoofGAN: Synthetic Fingerprint Spoof Images," IEEE Transactions on Information Forensics and Security, 2022.

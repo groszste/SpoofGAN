@@ -35,20 +35,15 @@ from image_utils import random_rotate, random_translate, pad_image
 def main(args):
 
     materials_dict = {
-        'live': 'renderer/log/biggan_binary2finger_Live/final',
-        'pa': 'renderer/log/biggan_binary2finger_all_PAs/final',
-        'body_double': 'renderer/log/biggan_binary2finger_BodyDouble/final',
-        'conductive_ink': 'renderer/log/biggan_binary2finger_conductiveinkonpaper/final',
-        'dragon_skin': 'renderer/log/biggan_binary2finger_Dragon_Skin/final',
-        'ecoflex': 'renderer/log/biggan_binary2finger_Ecoflex/final',
-        'gelatin': 'renderer/log/biggan_binary2finger_Gelatin/final',
-        'gold_fingers': 'renderer/log/biggan_binary2finger_goldfingers/final',
-        'gummy_overlay': 'renderer/log/biggan_binary2finger_Gummy_Overlay/final',
-        'knox_gelatin': 'renderer/log/biggan_binary2finger_Knox_Gelatin/final',
-        'playdoh': 'renderer/log/biggan_binary2finger_PlayDoh/final',
-        'tattoo': 'renderer/log/biggan_binary2finger_Tattoo/final',
-        'transparency': 'renderer/log/biggan_binary2finger_Transparency/final',
-        'woodglue': 'renderer/log/biggan_binary2finger_woodglue/final',
+        'live': 'renderer/log/biggan_binary2finger_Live/20220320-100630',
+        'pa': 'renderer/log/biggan_binary2finger_all_PAs/20220320-162834',
+        'body_double': 'renderer/log/biggan_binary2finger_BodyDouble/20220320-223430',
+        'conductive_ink': 'renderer/log/biggan_binary2finger_conductiveinkonpaper/20220323-192639',
+        'ecoflex': 'renderer/log/biggan_binary2finger_Ecoflex/20220320-223348',
+        'gelatin': 'renderer/log/biggan_binary2finger_Gelatin/20220320-223522',
+        'gummy_overlay': 'renderer/log/biggan_binary2finger_Gummy_Overlay/20220323-192604',
+        'playdoh': 'renderer/log/biggan_binary2finger_PlayDoh/20220320-223547',
+        'tattoo': 'renderer/log/biggan_binary2finger_Tattoo/20220323-192606',
     }
 
     seed = args.seed
@@ -63,7 +58,7 @@ def main(args):
     output_dir = os.path.join(output_dir, material)
 
     if material not in materials_dict:
-        raise Exeption('invalid material')
+        raise Exception('invalid material')
     else:
         TEXTURE_MODEL_DIR = materials_dict[material]
 
@@ -80,9 +75,11 @@ def main(args):
     config = utils.import_file(os.path.join(mp_model_dir, 'config.py'), 'config')
     
     # Load model files and config file
+    print('\nloading master print generator....\n')
     network = BigGAN()
     network.load_model(mp_model_dir) 
 
+    print('\nbegin master print generation\n')
     try:
         tempd = 'tempd_' + time.strftime("%Y%m%d-%H%M%S")
         if os.path.isdir(tempd):
@@ -105,7 +102,7 @@ def main(args):
                 curr += 1
 
         end = time.time()
-        print('master prints generated, duration: ', end - start)
+        print('\nmaster prints generated, duration: ', end - start)
 
         #WARP_IMAGES
         data = loadmat('STN/PCAParameterForDistortedVideo.mat')
@@ -121,6 +118,7 @@ def main(args):
         warper = TPSwarp(n0)
         warper.initialize()
 
+        print('\nbegin warping......\n')
         start = time.time()
         img_list = glob.glob(tempd + '/*.jpg')
         for path in tqdm(img_list):
@@ -167,7 +165,7 @@ def main(args):
             os.remove(path)
 
         end = time.time()
-        print(f'warping impressions completed, duration: {end-start}')
+        print(f'\nwarping impressions completed, duration: {end-start}')
 
         #BINARY2FINGER
         random.seed(0)
@@ -176,12 +174,14 @@ def main(args):
         config = utils.import_file(os.path.join(TEXTURE_MODEL_DIR, 'config.py'), 'config')
         
         # Load model files and config file
+        print("\nloading renderer model.........\n")
         network = BigGANRenderer()
         network.load_model(TEXTURE_MODEL_DIR, scope=None, random_ckpt=random_ckpt, rng=rng3)
 
         start = time.time()
         img_list = glob.glob(tempd + '/*.jpg')
         img_list.sort()
+        print('\nbegin rendering....\n')
         for path in tqdm(img_list):
             binary_image = cv2.imread(path, 0)
             fname = path.split('/')[-1]
@@ -211,11 +211,12 @@ def main(args):
             cv2.imwrite(path, out_img)
 
         end = time.time()
-        print(f'rendering completed, duration: {end-start}')
+        print(f'\nrendering completed, duration: {end-start}')
 
         if os.path.isdir(tempd):
             shutil.rmtree(tempd)  
     except:
+        print('\ngeneration failed, exiting.......\n')
         if os.path.isdir(tempd):
             shutil.rmtree(tempd) 
 
@@ -234,6 +235,6 @@ if __name__ == '__main__':
                         type=int, default=12)
     parser.add_argument("--start", help="Starting finger ID",
                         type=int, default=1)
-    parser.add_argument('--random_ckpt', action='store_false', help='Load a random ckpt. Using multiple ckpts increases diversity in generated fingerprints')
+    parser.add_argument('--random_ckpt', action='store_true', help='Load a random ckpt. Using multiple ckpts increases diversity in generated fingerprints')
     args = parser.parse_args()
     main(args)
