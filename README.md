@@ -13,7 +13,7 @@ This repository contains the code and a pre-generated dataset associated with th
 
 ## Database
 
-A preprepared dataset of synthetic fingerprints (live and 6 spoof types) is available for download at this link: http://biometrics.cse.msu.edu/Publications/Databases/MSU_SpoofGAN/ 
+A preprepared dataset of synthetic fingerprints (live and 6 spoof types) is available for download at this link: http://biometrics.cse.msu.edu/Publications/Databases/MSU_SpoofGAN/. There are 1,500 unique fingers with 3 live impressions and 3 impressions of each spoof type, giving a total of 31,500 images.
 
 ## Inference
 
