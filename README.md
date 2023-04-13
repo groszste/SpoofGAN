@@ -13,7 +13,7 @@ This repository contains the code and a pre-generated dataset associated with th
 
 ## Database
 
-A preprepared dataset of synthetic fingerprints (live and 13 spoof types) is available for download at this link: http://biometrics.cse.msu.edu/Publications/Databases/MSU_SpoofGAN/ 
+A preprepared dataset of synthetic fingerprints (live and 6 spoof types) is available for download at this link: http://biometrics.cse.msu.edu/Publications/Databases/MSU_SpoofGAN/ 
 
 ## Inference
 
