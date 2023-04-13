@@ -251,10 +251,8 @@ def load_model(sess, model_path, scope=None, random_ckpt=False, rng=np.random.Ra
             assert len(meta_files) == 1
             meta_file = os.path.join(model_path, meta_files[0])
             if random_ckpt:
-                ckpt_files = glob.glob(model_path + '/*.index') + glob.glob(model_path.replace('/final', '/final_sb_loss') + '/*.index')
+                ckpt_files = glob.glob(model_path + '/*.index')
                 ckpt_file = rng.choice(ckpt_files).replace('.index', '')
-                if 'sb_loss' in ckpt_file:
-                    meta_file = meta_file.replace('/final', '/final_sb_loss')
             else:
                 ckpt_file = tf.train.latest_checkpoint(model_path)
             
